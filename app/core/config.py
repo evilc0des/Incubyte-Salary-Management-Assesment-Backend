@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     postgres_host: str = "localhost"
     postgres_port: int = 5432
     database_url: str | None = None
+    integration_database_url: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=".env",
