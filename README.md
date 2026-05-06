@@ -29,6 +29,23 @@ The `employees` schema uses PostgreSQL extensions managed by Alembic:
    uvicorn app.main:app --reload
    ```
 
+## Seed employees
+
+Run the employee seeder from the backend root and provide external name files:
+
+```powershell
+.\.venv\Scripts\python.exe .\scripts\seed_employees.py `
+   --first-names-path <dir>\first_names.txt `
+   --last-names-path <dir>\last_names.txt
+```
+
+Notes:
+
+- Each run appends new employees; it does not delete or replace existing rows.
+- The default seed count is `10000` employees.
+- The script uses batched bulk inserts for regular developer use and accepts optional `--count`, `--batch-size`, and `--seed` arguments.
+- Name files must contain one name per line, and each usable value must fit within the 50-character employee name columns.
+
 ## TDD workflow
 
 1. Create and activate the backend virtual environment, then install runtime and test dependencies:
