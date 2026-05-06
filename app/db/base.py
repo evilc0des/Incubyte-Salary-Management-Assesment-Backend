@@ -1,5 +1,6 @@
 from app.models.base import Base
+from app.models.employee import Employee
 from app.models.user import User
 
-__all__ = ("Base", "User")
+__all__ = ("Base", "Employee", "User")
 

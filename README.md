@@ -2,6 +2,11 @@
 
 FastAPI starter with SQLAlchemy 2.x, Alembic, and PostgreSQL.
 
+The `employees` schema uses PostgreSQL extensions managed by Alembic:
+
+- `pgcrypto` for `gen_random_uuid()` primary keys
+- `pg_trgm` for trigram-backed `full_name` search
+
 ## Run locally
 
 1. Create a virtual environment.
