@@ -55,3 +55,26 @@ def test_seed_employees_appends_rows_and_uses_database_defaults(
     assert employee.currency == "USD"
     assert employee.salary > 0
     assert employee.hire_date is not None
+
+
+@pytest.mark.integration
+def test_employee_update_changes_updated_at(integration_engine: Engine) -> None:
+    with Session(integration_engine) as session:
+        employee = Employee(
+            first_name="Ada",
+            last_name="Lovelace",
+            job_title="Engineer",
+            department="Platform",
+            country="United Kingdom",
+            salary=100000,
+        )
+        session.add(employee)
+        session.commit()
+        session.refresh(employee)
+
+        original_updated_at = employee.updated_at
+        employee.job_title = "Principal Engineer"
+        session.commit()
+        session.refresh(employee)
+
+        assert employee.updated_at > original_updated_at

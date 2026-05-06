@@ -34,6 +34,7 @@ class Employee(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         Uuid,
         primary_key=True,
+        default=uuid.uuid4,
         server_default=text("gen_random_uuid()"),
     )
     first_name: Mapped[str] = mapped_column(String(50), nullable=False)
