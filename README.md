@@ -29,6 +29,14 @@ The `employees` schema uses PostgreSQL extensions managed by Alembic:
    uvicorn app.main:app --reload
    ```
 
+6. Open the live API docs:
+
+   ```text
+   Swagger UI: http://localhost:8000/docs
+   ReDoc: http://localhost:8000/redoc
+   OpenAPI JSON: http://localhost:8000/openapi.json
+   ```
+
 ## Seed employees
 
 Run the employee seeder from the backend root and provide external name files:

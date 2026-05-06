@@ -57,3 +57,47 @@ class EmployeeListResponse(BaseModel):
     total: int
     limit: int
     offset: int
+
+
+class EmployeeInsightsFilters(BaseModel):
+    country: str | None
+    job_title: str | None
+
+
+class EmployeeInsightsMetrics(BaseModel):
+    employee_count: int
+    currency: str
+    min_salary: Decimal | None
+    max_salary: Decimal | None
+    average_salary: Decimal | None
+    median_salary: Decimal | None
+    p25_salary: Decimal | None
+    p75_salary: Decimal | None
+    salary_range: Decimal | None
+    last_updated_at: datetime | None
+
+
+class EmployeeInsightsOverview(EmployeeInsightsMetrics):
+    filters: EmployeeInsightsFilters
+
+
+class CountryInsightsRow(EmployeeInsightsMetrics):
+    country: str
+
+
+class CountryInsightsListResponse(BaseModel):
+    items: list[CountryInsightsRow]
+    total: int
+    limit: int
+    offset: int
+
+
+class JobTitleInsightsRow(EmployeeInsightsMetrics):
+    job_title: str
+
+
+class JobTitleInsightsListResponse(BaseModel):
+    items: list[JobTitleInsightsRow]
+    total: int
+    limit: int
+    offset: int

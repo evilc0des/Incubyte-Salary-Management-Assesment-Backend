@@ -5,12 +5,16 @@ from uuid import uuid4
 
 from alembic import command
 from alembic.config import Config
+from fastapi.testclient import TestClient
 import pytest
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine, URL, make_url
 from sqlalchemy.exc import OperationalError
+from sqlalchemy.orm import Session, sessionmaker
 
 from app.core.config import settings
+from app.db.session import get_db
+from app.main import app
 
 
 def _get_backend_root() -> Path:
@@ -94,3 +98,23 @@ def integration_engine() -> Iterator[Engine]:
             )
             connection.execute(text(f"DROP DATABASE IF EXISTS {database_name}"))
         admin_engine.dispose()
+
+
+@pytest.fixture()
+def integration_client(integration_engine: Engine) -> Iterator[TestClient]:
+    testing_session_local = sessionmaker(bind=integration_engine, autocommit=False, autoflush=False)
+
+    def override_get_db() -> Iterator[Session]:
+        db = testing_session_local()
+        try:
+            yield db
+        finally:
+            db.close()
+
+    app.dependency_overrides[get_db] = override_get_db
+
+    try:
+        with TestClient(app) as test_client:
+            yield test_client
+    finally:
+        app.dependency_overrides.pop(get_db, None)

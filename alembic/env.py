@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from logging.config import fileConfig
+import os
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
@@ -15,6 +16,21 @@ def get_database_url() -> str:
     configured_url = config.attributes.get("database_url")
     if configured_url:
         return configured_url
+
+    if os.getenv("DATABASE_URL"):
+        return settings.sqlalchemy_database_uri
+
+    if any(
+        os.getenv(key)
+        for key in (
+            "POSTGRES_USER",
+            "POSTGRES_PASSWORD",
+            "POSTGRES_DB",
+            "POSTGRES_HOST",
+            "POSTGRES_PORT",
+        )
+    ):
+        return settings.sqlalchemy_database_uri
 
     configured_url = config.get_main_option("sqlalchemy.url")
     if configured_url:
