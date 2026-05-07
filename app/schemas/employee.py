@@ -92,6 +92,26 @@ class CountryInsightsListResponse(BaseModel):
     offset: int
 
 
+class DepartmentInsightsRow(EmployeeInsightsMetrics):
+    department: str
+
+
+class DepartmentInsightsListResponse(BaseModel):
+    items: list[DepartmentInsightsRow]
+    total: int
+    limit: int
+    offset: int
+
+
+class TenureBandInsightsRow(EmployeeInsightsMetrics):
+    tenure_band: str
+
+
+class TenureBandInsightsListResponse(BaseModel):
+    items: list[TenureBandInsightsRow]
+    total: int
+
+
 class JobTitleInsightsRow(EmployeeInsightsMetrics):
     job_title: str
 
@@ -101,3 +121,13 @@ class JobTitleInsightsListResponse(BaseModel):
     total: int
     limit: int
     offset: int
+
+
+class HiringTrendRow(BaseModel):
+    month: str
+    hires_count: int
+
+
+class HiringTrendResponse(BaseModel):
+    items: list[HiringTrendRow]
+    total: int

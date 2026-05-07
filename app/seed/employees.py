@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 from dataclasses import dataclass
+from datetime import date, timedelta
 from decimal import Decimal
 from itertools import islice
 from pathlib import Path
@@ -111,6 +112,11 @@ def _build_salary(randomizer: Random, *, row_number: int) -> Decimal:
     return Decimal(base_salary + salary_offset).quantize(Decimal("0.01"))
 
 
+def _build_hire_date(randomizer: Random, *, row_number: int) -> date:
+    days_back = randomizer.randint(0, 365 * 8) + (row_number % 90)
+    return date.today() - timedelta(days=days_back)
+
+
 def _generate_employee_rows(
     *,
     first_names: list[str],
@@ -127,6 +133,7 @@ def _generate_employee_rows(
             "department": DEPARTMENTS[row_number % len(DEPARTMENTS)],
             "country": COUNTRIES[(row_number + seed) % len(COUNTRIES)],
             "salary": _build_salary(randomizer, row_number=row_number),
+            "hire_date": _build_hire_date(randomizer, row_number=row_number),
         }
 
 

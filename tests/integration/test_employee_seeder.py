@@ -48,6 +48,7 @@ def test_seed_employees_appends_rows_and_uses_database_defaults(
     with Session(integration_engine) as session:
         employee_count = session.scalar(select(func.count()).select_from(Employee))
         employee = session.scalar(select(Employee).order_by(Employee.created_at, Employee.id).limit(1))
+        distinct_hire_dates = session.scalar(select(func.count(func.distinct(Employee.hire_date))))
 
     assert employee_count == 20
     assert employee is not None
@@ -55,6 +56,8 @@ def test_seed_employees_appends_rows_and_uses_database_defaults(
     assert employee.currency == "USD"
     assert employee.salary > 0
     assert employee.hire_date is not None
+    assert distinct_hire_dates is not None
+    assert distinct_hire_dates > 1
 
 
 @pytest.mark.integration
